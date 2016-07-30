@@ -1,9 +1,9 @@
 DROP TABLE HORARIO;
 DROP TABLE CLASE;
 DROP TABLE RELACION;
-DROP TABLE ALUMNO_TELEFONO;
+DROP TABLE ESTUDIANTE_TELEFONO;
 DROP TABLE PROFESOR;
-DROP TABLE ALUMNO; 
+DROP TABLE ESTUDIANTE; 
 DROP TABLE MATERIA;
 DROP TABLE GRUPO;
 
@@ -22,7 +22,7 @@ DROP TABLE GRUPO;
 /******************************************************************************************************************************/
 
 
-CREATE TABLE ALUMNO(
+CREATE TABLE ESTUDIANTE(
 
 	NumBoleta char(10), --Incluir numero de boleta valido, ej: 2013630567, 2014630201, etc.
 	Nombre varchar(100) NOT NULL, --Deben insertarse nombres completos iniciando por el nombre e iniciando la primera letra con mayúsculas, ej: 'Alejandro Rodriguez Ramos'
@@ -36,15 +36,15 @@ CREATE TABLE ALUMNO(
 	Primary Key (NumBoleta)
 );
  
-CREATE TABLE ALUMNO_TELEFONO(
+CREATE TABLE ESTUDIANTE_TELEFONO(
 
-	NumBoleta char(10), --Insertarse Numeros de Boleta ya ingresados en la tabla ALUMNO
+	NumBoleta char(10), --Insertarse Numeros de Boleta ya ingresados en la tabla ESTUDIANTE
 	Telefono varchar(10), --No deben haber telefonos vacios
 	Primary Key(NumBoleta, Telefono)
 );
 
 
-ALTER TABLE ALUMNO_TELEFONO ADD CONSTRAINT PK_ALUMNO_TELEFONO FOREIGN KEY(NumBoleta) REFERENCES ALUMNO(NumBoleta);
+ALTER TABLE ESTUDIANTE_TELEFONO ADD CONSTRAINT PK_ESTUDIANTE_TELEFONO FOREIGN KEY(NumBoleta) REFERENCES ESTUDIANTE(NumBoleta);
 
 --------------------------------------------------------------------------------------------------------------------------------
 
@@ -97,13 +97,13 @@ CREATE TABLE RELACION(
 	CicloEscolar char(6), --Deben insertarse de la forma: '2014-1', '2013-2', etc.
 	IdMateria varchar(5), --Deben insertarse en el formato 'C[Nivel][Dos Digito], ej: C101, C215, C332, etc. 
 	IdProfesor char(5), --Deben insertarse en el formato '[DIGITO][DIGITO][DIGITO]' Ej: '324','452','234'
-	Calificacion int NULL, --El campo debe ser NULL si actualmente el alumno con identificador /NumBoleta/ no ha terminado de cursar la materia con identificador /IdMateria/
+	Calificacion int NULL, --El campo debe ser NULL si actualmente el ESTUDIANTE con identificador /NumBoleta/ no ha terminado de cursar la materia con identificador /IdMateria/
 	Semestre int NOT NULL, --Insertar el semestre en el que se cursa/cursó la materia (puede ser distinto al nivel en el que se debe cursar la materia)
 	FormaAprobacion char(3) NULL, -- El campo será NULL si la materia se esta cursando actualmente, si ya se cursó podrá contener los valores: 'ORD', 'EXT', 'ETS'.
 	PRIMARY KEY(NumBoleta, IdGrupo, CicloEscolar, IdMateria, IdProfesor)
 );
 
-ALTER TABLE RELACION ADD CONSTRAINT PK_RELACION_ALUMNO FOREIGN KEY(NumBoleta) REFERENCES ALUMNO(NumBoleta);
+ALTER TABLE RELACION ADD CONSTRAINT PK_RELACION_ESTUDIANTE FOREIGN KEY(NumBoleta) REFERENCES ESTUDIANTE(NumBoleta);
 ALTER TABLE RELACION ADD CONSTRAINT PK_RELACION_GRUPO FOREIGN KEY(IdGrupo, CicloEscolar) REFERENCES GRUPO(IdGrupo, CicloEscolar);
 ALTER TABLE RELACION ADD CONSTRAINT PK_RELACION_MATERIA FOREIGN KEY(IdMateria) REFERENCES MATERIA(IdMateria);
 ALTER TABLE RELACION ADD CONSTRAINT PK_RELACION_PROFESOR FOREIGN KEY(IdProfesor) REFERENCES PROFESOR(IdProfesor);
@@ -155,9 +155,9 @@ ALTER TABLE HORARIO ADD CONSTRAINT PK_HORARIO_CLASE FOREIGN KEY (IdGrupo,CicloEs
 
 
 
-/* REGISTROS DE TABLA: ALUMNO */
+/* REGISTROS DE TABLA: ESTUDIANTE */
  
-insert into ALUMNO(NumBoleta,Nombre,Contraseña,Semestre,FechaIngreso,FechaNacim,Estado,Municipio,DirExtra) values
+insert into ESTUDIANTE(NumBoleta,Nombre,Contraseña,Semestre,FechaIngreso,FechaNacim,Estado,Municipio,DirExtra) values
 ('2014650500','Escutia Alvarez Adrian','hol',1,'2014-8-1','1995-6-18','Distrito Federal','Iztapalapa','Col Santa Martha  calle Manuel Calero #43'),
 ('2014650501','Aguilera Rosas Enrique','holis123',1,'2014-8-1','1995-4-18','Estado de México','Chalco','Col Miravalle  calle Escutia #54'),
 ('2014650502','Estrella Rodriguez Juanito','yolo',1,'2014-8-1','1994-12-18','Estado de México','Chapultepec','Col Santa calle Espinoza #673'),
@@ -260,9 +260,9 @@ insert into ALUMNO(NumBoleta,Nombre,Contraseña,Semestre,FechaIngreso,FechaNacim,
 ('2014650599', 'León Pereda Jimena','lpj12',1, '2014-8-1','1995-12-12','Estado de Mexico','Tlalnepantla','Col Villas calle Cielo Rojo #332');
 
 
-/* REGISTROS DE TABLA: ALUMNO_TELEFONO */
+/* REGISTROS DE TABLA: ESTUDIANTE_TELEFONO */
 
-insert into ALUMNO_TELEFONO (NumBoleta,Telefono) values
+insert into ESTUDIANTE_TELEFONO (NumBoleta,Telefono) values
 
 ('2014650500','5536674949'),
 ('2014650501','5536674435'),
@@ -1753,7 +1753,7 @@ INSERT INTO RELACION(NumBoleta, IdGrupo, CicloEscolar, IdMateria, IdProfesor, Se
 
 
 /*INGRESAR Calificacion Y FormaAprobacion DE LA TABLA RELACION A
-TODOS LOS ALUMNOS EN ALGUNA DE SUS MATERIAS POR GRUPO*/
+TODOS LOS ESTUDIANTES EN ALGUNA DE SUS MATERIAS POR GRUPO*/
 
 --Grupo 1CM1 en la materia de Análisis Vectorial
 UPDATE RELACION SET Calificacion = 8, FormaAprobacion = 'ORD' WHERE NumBoleta = '2014650500' AND IdMateria = 'C101';
