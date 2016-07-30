@@ -2,7 +2,7 @@ DROP TABLE HORARIO;
 DROP TABLE CLASE;
 DROP TABLE RELACION;
 DROP TABLE ESTUDIANTE_TELEFONO;
-DROP TABLE PROFESOR;
+DROP TABLE MAESTRO;
 DROP TABLE ESTUDIANTE; 
 DROP TABLE MATERIA;
 DROP TABLE GRUPO;
@@ -68,12 +68,12 @@ CREATE TABLE MATERIA(
 
 --------------------------------------------------------------------------------------------------------------------------------
 
-CREATE TABLE PROFESOR(
+CREATE TABLE MAESTRO(
 
-	IdProfesor char(5), --Deben insertarse en el formato '[DIGITO][DIGITO][DIGITO]' Ej: '324','452','234'
+	IdMAESTRO char(5), --Deben insertarse en el formato '[DIGITO][DIGITO][DIGITO]' Ej: '324','452','234'
 	Nombre varchar(50) NOT NULL, --Deben ingresarse nombres completos iniciando por el nombre, primer letra de cada palabra en Mayusculas, ej: Idalia Maldonado Castillo
-	Grado varchar(30) --Debe Ingresarse el máximo grado de estudios del Profesor, ej: MAESTRIA, DOCTORADO, etc.
-	PRIMARY KEY(IdProfesor)
+	Grado varchar(30) --Debe Ingresarse el máximo grado de estudios del MAESTRO, ej: MAESTRIA, DOCTORADO, etc.
+	PRIMARY KEY(IdMAESTRO)
 );
  
 --------------------------------------------------------------------------------------------------------------------------------
@@ -96,17 +96,17 @@ CREATE TABLE RELACION(
 	IdGrupo varchar(5), /*Deben insertarse tal como son los grupos reales, ej: '2CM5', '2CV11', '3CM1', etc.*/
 	CicloEscolar char(6), --Deben insertarse de la forma: '2014-1', '2013-2', etc.
 	IdMateria varchar(5), --Deben insertarse en el formato 'C[Nivel][Dos Digito], ej: C101, C215, C332, etc. 
-	IdProfesor char(5), --Deben insertarse en el formato '[DIGITO][DIGITO][DIGITO]' Ej: '324','452','234'
+	IdMAESTRO char(5), --Deben insertarse en el formato '[DIGITO][DIGITO][DIGITO]' Ej: '324','452','234'
 	Calificacion int NULL, --El campo debe ser NULL si actualmente el ESTUDIANTE con identificador /NumBoleta/ no ha terminado de cursar la materia con identificador /IdMateria/
 	Semestre int NOT NULL, --Insertar el semestre en el que se cursa/cursó la materia (puede ser distinto al nivel en el que se debe cursar la materia)
 	FormaAprobacion char(3) NULL, -- El campo será NULL si la materia se esta cursando actualmente, si ya se cursó podrá contener los valores: 'ORD', 'EXT', 'ETS'.
-	PRIMARY KEY(NumBoleta, IdGrupo, CicloEscolar, IdMateria, IdProfesor)
+	PRIMARY KEY(NumBoleta, IdGrupo, CicloEscolar, IdMateria, IdMAESTRO)
 );
 
 ALTER TABLE RELACION ADD CONSTRAINT PK_RELACION_ESTUDIANTE FOREIGN KEY(NumBoleta) REFERENCES ESTUDIANTE(NumBoleta);
 ALTER TABLE RELACION ADD CONSTRAINT PK_RELACION_GRUPO FOREIGN KEY(IdGrupo, CicloEscolar) REFERENCES GRUPO(IdGrupo, CicloEscolar);
 ALTER TABLE RELACION ADD CONSTRAINT PK_RELACION_MATERIA FOREIGN KEY(IdMateria) REFERENCES MATERIA(IdMateria);
-ALTER TABLE RELACION ADD CONSTRAINT PK_RELACION_PROFESOR FOREIGN KEY(IdProfesor) REFERENCES PROFESOR(IdProfesor);
+ALTER TABLE RELACION ADD CONSTRAINT PK_RELACION_MAESTRO FOREIGN KEY(IdMAESTRO) REFERENCES MAESTRO(IdMAESTRO);
 
 --------------------------------------------------------------------------------------------------------------------------------
 
@@ -114,13 +114,13 @@ CREATE TABLE CLASE(
 	IdGrupo varchar(5),
 	CicloEscolar char(6),
 	IdMateria varchar(5),
-	IdProfesor char(5),
-	PRIMARY KEY (IdGrupo, CicloEscolar, IdMateria, IdProfesor)
+	IdMAESTRO char(5),
+	PRIMARY KEY (IdGrupo, CicloEscolar, IdMateria, IdMAESTRO)
 	);
 
 ALTER TABLE CLASE ADD CONSTRAINT PK_CLASE_GRUPO FOREIGN KEY (IdGrupo,CicloEscolar) REFERENCES GRUPO(IdGrupo,CicloEscolar);
 ALTER TABLE CLASE ADD CONSTRAINT PK_CLASE_MATERIA FOREIGN KEY (IdMateria) REFERENCES MATERIA(IdMateria);
-ALTER TABLE CLASE ADD CONSTRAINT PK_CLASE_PROFESOR FOREIGN KEY (IdProfesor) REFERENCES PROFESOR(IdProfesor);
+ALTER TABLE CLASE ADD CONSTRAINT PK_CLASE_MAESTRO FOREIGN KEY (IdMAESTRO) REFERENCES MAESTRO(IdMAESTRO);
 
 -------------------------------------------------------------------------------------------------------------------------------
 
@@ -128,14 +128,14 @@ CREATE TABLE HORARIO(
 	IdGrupo varchar(5),
 	CicloEscolar char(6),
 	IdMateria varchar(5),
-	IdProfesor char(5),
+	IdMAESTRO char(5),
 	Dia varchar(10),
 	HoraIni Time(0) not null,
 	HoraFin Time(0) not null,
-	PRIMARY KEY (IdGrupo, CicloEscolar, IdMateria, IdProfesor, Dia)
+	PRIMARY KEY (IdGrupo, CicloEscolar, IdMateria, IdMAESTRO, Dia)
 	);
 	 
-ALTER TABLE HORARIO ADD CONSTRAINT PK_HORARIO_CLASE FOREIGN KEY (IdGrupo,CicloEscolar,IdMateria,IdProfesor) REFERENCES CLASE(IdGrupo,CicloEscolar,IdMateria,IdProfesor);
+ALTER TABLE HORARIO ADD CONSTRAINT PK_HORARIO_CLASE FOREIGN KEY (IdGrupo,CicloEscolar,IdMateria,IdMAESTRO) REFERENCES CLASE(IdGrupo,CicloEscolar,IdMateria,IdMAESTRO);
 
 
 
@@ -435,9 +435,9 @@ INSERT INTO MATERIA (IdMateria, Nombre, Obligatoria) values
 ;
 
 
-/* REGISTROS DE TABLA: PROFESOR */
+/* REGISTROS DE TABLA: MAESTRO */
 
-insert into PROFESOR(IdProfesor,Nombre,Grado) values 
+insert into MAESTRO(IdMAESTRO,Nombre,Grado) values 
 (101,'Benjamín López Carrera','DOCTOR'),
 (102,'Benjamín Luna Benoso','DOCTOR'),
 (103,'Héctor Manuel Manzanilla Granados','DOCTOR'),
@@ -518,7 +518,7 @@ insert into PROFESOR(IdProfesor,Nombre,Grado) values
 
 /* REGISTROS DE TABLA: CLASE */
 
-INSERT INTO CLASE (IdGrupo,CicloEscolar,IdMateria, IdProfesor) VALUES 
+INSERT INTO CLASE (IdGrupo,CicloEscolar,IdMateria, IdMAESTRO) VALUES 
 ('1CM1','2015-1','C101','145'), 
 ('1CM1','2015-1','C102','124'),
 ('1CM1','2015-1','C103','132'),
@@ -628,7 +628,7 @@ INSERT INTO CLASE (IdGrupo,CicloEscolar,IdMateria, IdProfesor) VALUES
 
 
 /* REGISTROS DE TABLA: HORARIO */
-INSERT INTO HORARIO (IdGrupo,CicloEscolar,IdMateria,IdProfesor,Dia, HoraIni, HoraFin) values
+INSERT INTO HORARIO (IdGrupo,CicloEscolar,IdMateria,IdMAESTRO,Dia, HoraIni, HoraFin) values
 
 ('1CM1','2015-1','C101','145','Lunes','07:00:00','08:30:00'),
 ('1CM1','2015-1','C105','156','Lunes','08:30:00','10:00:00'),
@@ -1039,7 +1039,7 @@ INSERT INTO HORARIO (IdGrupo,CicloEscolar,IdMateria,IdProfesor,Dia, HoraIni, Hor
 
 /* REGISTROS DE TABLA: RELACION*/ 
 
-INSERT INTO RELACION(NumBoleta, IdGrupo, CicloEscolar, IdMateria, IdProfesor, Semestre) VALUES
+INSERT INTO RELACION(NumBoleta, IdGrupo, CicloEscolar, IdMateria, IdMAESTRO, Semestre) VALUES
 ('2014650500', '1CM1', '2015-1', 'C101', '145', 1),
 ('2014650500', '1CM1', '2015-1', 'C102', '124', 1),
 ('2014650500', '1CM1', '2015-1', 'C103', '132', 1),
