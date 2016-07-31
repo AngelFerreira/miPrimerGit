@@ -1,4 +1,4 @@
-DROP TABLE HORARIO;
+DROP TABLE hORARIO2;
 DROP TABLE HORA_CLASE;
 DROP TABLE RELACION;
 DROP TABLE ESTUDIANTE_TELEFONO;
@@ -124,7 +124,7 @@ ALTER TABLE HORA_CLASE ADD CONSTRAINT PK_HORA_CLASE_MAESTRO FOREIGN KEY (IdMAEST
 
 -------------------------------------------------------------------------------------------------------------------------------
 
-CREATE TABLE HORARIO(
+CREATE TABLE hORARIO2(
 	IdGrupo varchar(5),
 	CicloEscolar char(6),
 	IdMateria varchar(5),
@@ -135,7 +135,7 @@ CREATE TABLE HORARIO(
 	PRIMARY KEY (IdGrupo, CicloEscolar, IdMateria, IdMAESTRO, Dia)
 	);
 	 
-ALTER TABLE HORARIO ADD CONSTRAINT PK_HORARIO_HORA_CLASE FOREIGN KEY (IdGrupo,CicloEscolar,IdMateria,IdMAESTRO) REFERENCES HORA_CLASE(IdGrupo,CicloEscolar,IdMateria,IdMAESTRO);
+ALTER TABLE hORARIO2 ADD CONSTRAINT PK_hORARIO2_HORA_CLASE FOREIGN KEY (IdGrupo,CicloEscolar,IdMateria,IdMAESTRO) REFERENCES HORA_CLASE(IdGrupo,CicloEscolar,IdMateria,IdMAESTRO);
 
 
 
@@ -627,8 +627,8 @@ INSERT INTO HORA_CLASE (IdGrupo,CicloEscolar,IdMateria, IdMAESTRO) VALUES
 ('1CM15','2015-1','C112','174')
 
 
-/* REGISTROS DE TABLA: HORARIO */
-INSERT INTO HORARIO (IdGrupo,CicloEscolar,IdMateria,IdMAESTRO,Dia, HoraIni, HoraFin) values
+/* REGISTROS DE TABLA: hORARIO2 */
+INSERT INTO hORARIO2 (IdGrupo,CicloEscolar,IdMateria,IdMAESTRO,Dia, HoraIni, HoraFin) values
 
 ('1CM1','2015-1','C101','145','Lunes','07:00:00','08:30:00'),
 ('1CM1','2015-1','C105','156','Lunes','08:30:00','10:00:00'),
